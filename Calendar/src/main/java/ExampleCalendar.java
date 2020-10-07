@@ -5,60 +5,45 @@ import java.util.Locale;
 
 
 /**
- * Java 核心技术 p.103
- * CalendarTest
- * 打印日历
+ * Core Java p.103
+ * Print a monthly calendar.
+ *  Sun Mon Tue Wed Thu Fri Sat
+ *                   1   2   3
+ *   4   5   6   7*  8   9  10
+ *  11  12  13  14  15  16  17
+ *  18  19  20  21  22  23  24
+ *  25  26  27  28  29  30  31
+ *
  * 2020/10/06
  */
 public class ExampleCalendar {
 
     public static void main(String[] args) {
-
-        Locale.setDefault(Locale.US);
-
         Calendar date = new GregorianCalendar();
 
-        printShortWeekdays(getShortWeekdays());
+        printShortWeekdays(getShortWeekdays(Locale.US));
         printMonthDays(date);
-
     }
 
-    public static String[] getShortWeekdays() {
-        return new DateFormatSymbols().getShortWeekdays();
+    public static String[] getShortWeekdays(Locale locale) {
+        return new DateFormatSymbols(locale).getShortWeekdays();
     }
 
     public static void printShortWeekdays(String[] shortWeekDays) {
-
         for (String shortWeekDay : shortWeekDays) {
             if(!shortWeekDay.equals(""))
             System.out.printf("%4s", shortWeekDay);
         }
         System.out.println();
-
     }
 
     public static void printMonthDays(Calendar date) {
-
         int today = date.get(Calendar.DAY_OF_MONTH);
         int month = date.get(Calendar.MONTH);
 
         date.set(Calendar.DAY_OF_MONTH, 1);
-        int weekday = date.get(Calendar.DAY_OF_WEEK);
-        int indent = 0;
-        int firstDayOfWeek = date.getFirstDayOfWeek();
+        printIndent(calculateIndent(date));
 
-        while (weekday != firstDayOfWeek) {
-            indent++;
-            date.add(Calendar.DAY_OF_MONTH, -1);
-            weekday = date.get(Calendar.DAY_OF_WEEK);
-        }
-
-        for (; indent > 0; indent--) {
-            System.out.printf("%4s", " ");
-            date.add(Calendar.DAY_OF_MONTH, 1);
-        }
-
-        date.set(Calendar.DAY_OF_WEEK, firstDayOfWeek);
         date.add(Calendar.DAY_OF_WEEK, -1);
         int lastDayOfWeek = date.get(Calendar.DAY_OF_WEEK);
         date.set(Calendar.MONTH, month);
@@ -69,6 +54,30 @@ public class ExampleCalendar {
             else System.out.print(" ");
             if (date.get(Calendar.DAY_OF_WEEK) == lastDayOfWeek) System.out.println();
         }
+    }
+
+    public static int calculateIndent(Calendar firstDayOfMonth) {
+        int indent = 0;
+        int firstDayOfWeek = firstDayOfMonth.getFirstDayOfWeek();
+        int weekday = firstDayOfMonth.get(Calendar.DAY_OF_WEEK);
+
+        while (weekday != firstDayOfWeek) {
+            indent++;
+            firstDayOfMonth.add(Calendar.DAY_OF_MONTH, -1);
+            weekday = firstDayOfMonth.get(Calendar.DAY_OF_WEEK);
+        }
+
+        return indent;
+    }
+
+    public static void printIndent(int indent) {
+        for (; indent > 0; indent--) {
+            System.out.printf("%4s", " ");
+        }
+    }
+
+    public static void getLastDayOfWeek(Calendar date) {
 
     }
+
 }
