@@ -23,11 +23,16 @@ public class ExampleCalendarTest {
 
     @Test
     public void testCalculateIndent() {
-
         Calendar date = new GregorianCalendar(2020, Calendar.OCTOBER, 1);
 
         assertEquals(4, ExampleCalendar.calculateIndent(date));
+    }
 
+    @Test
+    public void testGetLastDayOfWeek() {
+        Calendar date = new GregorianCalendar(2020, Calendar.OCTOBER, 6);
+
+        assertEquals(7, ExampleCalendar.getLastDayOfWeek(date));
     }
 
 }
